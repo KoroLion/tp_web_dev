@@ -13,7 +13,10 @@
             </div>
             <div class="info">
                 <div class="username">
-                    <h2>{{ user.username }}</h2>
+                    <span class="h2">{{ user.username }}</span>
+                    {% if user != request.user %}
+                        <button class="btn btn-primary mb-3 ml-3" style="display: inline-block">Subscribe</button>
+                    {% endif %}
                 </div>
                 <div class="statistics">
                     <span><strong>{{ user.moment_set.count }}</strong> moments</span>

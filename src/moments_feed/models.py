@@ -36,3 +36,9 @@ class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     content = models.CharField(max_length=512)
     created_date = models.DateTimeField()
+
+
+class Subscription(models.Model):
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
+    follows = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
+    subscribed_date = models.DateTimeField()
