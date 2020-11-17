@@ -42,3 +42,16 @@ class Subscription(models.Model):
     follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
     follows = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
     subscribed_date = models.DateTimeField()
+
+
+class Like(models.Model):
+    # change to django mechanism for multiple tables
+    moment = models.ForeignKey(Moment, on_delete=models.CASCADE, blank=True, null=True)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, blank=True, null=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_date = models.DateTimeField()
+
+
+class Tag(models.Model):
+    moment = models.ManyToManyField(Moment)
+    name = models.CharField(max_length=255)
