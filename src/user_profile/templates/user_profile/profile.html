@@ -1,10 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static "user_profile/profile.css" %}">
+    <div class="user-profile container">
+        <div class="user-info">
+            <div class="avatar">
+                <div class="image">
+                    <img src="{{ user.avatar.url }}" alt="">
+                </div>
+            </div>
+            <div class="info">
+                <div class="username">
+                    <h2>{{ user.username }}</h2>
+                </div>
+                <div class="statistics">
+                    <span><strong>{{ user.moment_set.count }}</strong> moments</span>
+                    <span><strong>0</strong> followers</span>
+                    <span><strong>0</strong> following</span>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="user-moments">
+            {% for moment in user.moment_set.all %}
+                <div>
+                    <a href="#">
+                        <img src="{{ moment.image.url }}" alt="">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

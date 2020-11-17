@@ -8,6 +8,7 @@ from django.contrib.auth.views import LogoutView
 from registration.views import RegistrationView
 from authentication.views import LoginView
 from moments_feed.views import MomentsFeedView
+from user_profile.views import Profile
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
@@ -15,6 +16,8 @@ urlpatterns = [
     path('signup/', RegistrationView.as_view(), name='signup'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(next_page='/login/'), name='logout'),
+
+    path('@<str:username>/', Profile.as_view(), name='profile'),
 
     path('', MomentsFeedView.as_view(), name='moments_feed'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

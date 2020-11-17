@@ -1,22 +1,15 @@
 import os
 from uuid import uuid1
-from PIL import Image
 
 from django.db import models
 from django.dispatch import receiver
 
+from utils.img_tools import compress_image
 from user_profile.models import User
 
 
 def get_moment_image_path(instance, filename):
     return 'moments/user_{}/{}.jpg'.format(instance.author.id, uuid1())
-
-
-def convert_image(img_path, w, h):
-    img = Image.open(img_path)
-    img.thumbnail((600, 600))
-    img = img.convert("RGB")
-    img.save(img_path, "JPEG", quality=90)
 
 
 class Moment(models.Model):
@@ -27,7 +20,7 @@ class Moment(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.image:
-            convert_image(self.image.path, 600, 600)
+            compress_image(self.image.path, 600, 600)
 
 
 @receiver(models.signals.post_delete, sender=Moment)

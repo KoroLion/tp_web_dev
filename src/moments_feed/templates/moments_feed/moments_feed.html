@@ -10,11 +10,13 @@
             <div class="moment">
                 <div class="user-info">
                     <div class="avatar">
-                        <img src="{% static "logo-lg.png" %}" alt="">
+                        <a href="{% url "profile" moment.author.username %}">
+                            <img src="{{ moment.author.avatar.url }}" alt="">
+                        </a>
                     </div>
                     <div class="username-and-location">
                         <div class="username">
-                            <a href="#">{{ moment.author.username }}</a>
+                            <a href="{% url "profile" moment.author.username %}">{{ moment.author.username }}</a>
                         </div>
                         <div class="location">
                             Москва, Россия
@@ -27,8 +29,8 @@
                 </div>
 
                 <div class="controls">
-                    <svg class="mr-2" width="32" height="32">
-                        <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#heart-fill" />
+                    <svg class="hover-highlight" width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#heart"></use>
                     </svg>
                 </div>
 
