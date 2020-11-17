@@ -26,11 +26,35 @@
                             <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#house"></use>
                         </svg>
                     </a>
-                    <a href="#" class="hover-highlight">
-                        <svg width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
-                            <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#heart"></use>
-                        </svg>
-                    </a>
+                    <div class="dropdown dropdown-events">
+                        <a href="#" class="hover-highlight" id="dropdownEventsButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <svg width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#heart"></use>
+                            </svg>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="dropdownEventsButton">
+                            <div class="event">
+                                <div class="avatar">
+                                    <div class="image">
+                                        <img src="{{ request.user.avatar.url }}" alt="">
+                                    </div>
+                                </div>
+                                <div class="event-text"><a href="#">{{ request.user.username }}</a> subscribed</div>
+                                <div class="image"></div>
+                                <div class="subscribe"><button class="btn btn-primary">Subscribe</button></div>
+                            </div>
+                            <div class="event">
+                                <div class="avatar">
+                                    <div class="image">
+                                        <img src="{{ request.user.avatar.url }}" alt="">
+                                    </div>
+                                </div>
+                                <div class="event-text"><a href="#">{{ request.user.username }}</a> liked your moment</div>
+                                <div class="image"></div>
+                                <div class="subscribe"><button class="btn btn-primary">Subscribe</button></div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="user dropdown">
                         <div class="avatar" id="dropdownProfileButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img src="{{ user.avatar.url }}" alt="">

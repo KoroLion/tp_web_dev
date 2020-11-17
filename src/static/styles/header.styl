@@ -4,9 +4,34 @@ header
     > a.hover-highlight
       color white
       padding-top 5px
-    > a, div.user
+    > a, div.user, div.dropdown-events
       display block
       margin-left 20px
+    div.dropdown-events
+      padding-top 5px
+      > a.hover-highlight
+        color white
+      div.event
+        width 500px
+        height 70px
+        display flex
+        div.avatar
+          width 60px
+          height 60px
+          padding 5px
+          text-align center
+          div.image
+            border-radius 100%
+            overflow hidden
+            img
+              width 100%
+              height 100%
+        div.event-text
+          flex-grow 1
+          padding-top 5px
+        div.subscribe
+          line-height 60px
+          width 100px
     div.user
       width 40px
       height 40px

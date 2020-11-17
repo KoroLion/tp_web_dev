@@ -18,7 +18,7 @@ class User(AbstractUser):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.avatar:
-            compress_image(self.avatar.path, 256, 256)
+            compress_image(self.avatar.path, 256, 256, False)
 
 
 @receiver(models.signals.post_delete, sender=User)
@@ -26,3 +26,18 @@ def auto_delete_image_on_delete(sender, instance, **kwargs):
     if instance.image:
         if os.path.isfile(instance.image.path):
             os.remove(instance.image.path)
+
+
+@receiver(models.signals.pre_save, sender=User)
+def auto_delete_file_on_change(sender, instance, **kwargs):
+    if not instance.pk:
+        return False
+
+    try:
+        old_avatar = User.objects.get(pk=instance.pk).avatar
+    except User.DoesNotExist:
+        return False
+
+    if instance.avatar != old_avatar:
+        if os.path.isfile(old_avatar.path):
+            os.remove(old_avatar.path)

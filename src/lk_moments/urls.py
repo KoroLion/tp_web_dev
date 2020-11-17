@@ -18,7 +18,7 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(next_page=settings.LOGIN_URL), name='logout'),
 
-    path('@<str:username>/', login_required(Profile.as_view()), name='profile'),
+    path('@<str:slug>/', login_required(Profile.as_view()), name='profile'),
 
     path('', login_required(MomentsFeedView.as_view()), name='moments_feed'),
     path('moments/<int:pk>/', login_required(MomentView.as_view()), name='moment'),
