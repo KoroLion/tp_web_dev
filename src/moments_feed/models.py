@@ -18,6 +18,9 @@ class Moment(models.Model):
     image = models.ImageField(upload_to=get_moment_image_path)
     created_date = models.DateTimeField()
 
+    def __str__(self):
+        return 'Moment {}'.format(self.pk)
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.image:
@@ -54,4 +57,7 @@ class Like(models.Model):
 
 class Tag(models.Model):
     moment = models.ManyToManyField(Moment)
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name

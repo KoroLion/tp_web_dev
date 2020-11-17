@@ -51,6 +51,12 @@
                         </div>
                     {% endfor %}
                 </div>
+                <div class="tags">
+                    Tags:
+                    {% for tag in moment.tag_set.all %}
+                        {{ tag.name }},
+                    {% endfor %}
+                </div>
                 <div class="controls">
                     <svg class="hover-highlight" width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#heart"></use>
