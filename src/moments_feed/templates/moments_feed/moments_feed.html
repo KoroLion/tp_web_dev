@@ -18,20 +18,32 @@
                         <div class="username">
                             <a href="{% url "profile" moment.author.username %}">{{ moment.author.username }}</a>
                         </div>
-                        <div class="location">
-                            Москва, Россия
+                        <div class="description">
+                            {% if moment.description %}
+                                {{ moment.description }}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
 
                 <div class="image">
-                    <img src="{{ moment.image.url }}" alt="{{ moment.image.url }}">
+                    <a href="{% url "moment" moment.pk %}">
+                        <img src="{{ moment.image.url }}" alt="{{ moment.image.url }}">
+                    </a>
                 </div>
 
                 <div class="controls">
                     <svg class="hover-highlight" width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#heart"></use>
                     </svg>
+                    <a href="{% url "moment" moment.pk %}" class="hover-highlight">
+                        <svg class=" ml-2" width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#chat-right"></use>
+                        </svg>
+                    </a>
+                </div>
+                <div class="statistics">
+                    <span>0 likes</span><span>{{ moment.comment_set.count }} comments</span>
                 </div>
 
                 <div class="date">

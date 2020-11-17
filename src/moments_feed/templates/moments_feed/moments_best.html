@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static "moments_feed/moments_list.css" %}">
+
+    <div class="container mt-5">
+        <div class="moments-list">
+            {% for moment in moments %}
+                <div class="lite-moment">
+                    <a href="{% url "moment" moment.pk %}">
+                        <img src="{{ moment.image.url }}" alt="">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if is_paginated %}
+            <div class="paginator mt-5">
+                {% include "moments_feed/paginator_nav.html" %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

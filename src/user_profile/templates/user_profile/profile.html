@@ -28,7 +28,7 @@
         <div class="user-moments">
             {% for moment in user.moment_set.all %}
                 <div>
-                    <a href="#">
+                    <a href="{% url "moment" moment.pk %}">
                         <img src="{{ moment.image.url }}" alt="">
                     </a>
                 </div>

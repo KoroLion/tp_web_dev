@@ -14,6 +14,7 @@ def get_moment_image_path(instance, filename):
 
 class Moment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    description = models.CharField(max_length=255, blank=True, null=True)
     image = models.ImageField(upload_to=get_moment_image_path)
     created_date = models.DateTimeField()
 
@@ -28,3 +29,10 @@ def auto_delete_image_on_delete(sender, instance, **kwargs):
     if instance.image:
         if os.path.isfile(instance.image.path):
             os.remove(instance.image.path)
+
+
+class Comment(models.Model):
+    moment = models.ForeignKey(Moment, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    content = models.CharField(max_length=512)
+    created_date = models.DateTimeField()

@@ -11,8 +11,12 @@
             </a>
 
             {% if request.user.is_authenticated %}
+                <div class="search">
+                    <input type="text" class="form-control" placeholder="Search by tag...">
+                </div>
+
                 <div class="controls">
-                    <a href="#" class="hover-highlight">
+                    <a href="{% url "moments_best" %}" class="hover-highlight">
                         <svg width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#compass"></use>
                         </svg>
@@ -34,17 +38,16 @@
                         <div class="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="dropdownProfileButton">
                             <a class="dropdown-item" href="{% url "profile" request.user.username %}">Profile</a>
                             {% if request.user.is_staff %}
-                                <a class="dropdown-item text-warning" href="{% url "admin:index" %}" target="_blank">
+                                <a class="dropdown-item text-primary" href="{% url "admin:index" %}" target="_blank">
                                     Administrator
                                 </a>
                             {% endif %}
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-danger" href="{% url "logout" %}">Logout</a>
                         </div>
                     </div>
                 </div>
-            {% else %}
-                <a href="{% url "login" %}" class="btn btn-light">Login</a>
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
     </div>
 </header>

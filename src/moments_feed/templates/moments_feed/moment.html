@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static "moments_feed/moment.css" %}">
+
+    <div class="container mt-5">
+        <div class="moment">
+            <div class="image">
+                <img src="{{ moment.image.url }}" alt="{{ moment.image.url }}">
+            </div>
+            <div class="user-info-and-comments">
+                <div class="user-info">
+                    <div class="avatar">
+                        <a href="{% url "profile" moment.author.username %}">
+                            <img src="{{ moment.author.avatar.url }}" alt="">
+                        </a>
+                    </div>
+                    <div class="username-and-location">
+                        <div class="username">
+                            <a href="{% url "profile" moment.author.username %}">{{ moment.author.username }}</a>
+                        </div>
+                        <div class="description">
+                            {% if moment.description %}
+                                {{ moment.description }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="comments">
+                    {% for comment in moment.comment_set.all %}
+                        <div class="comment">
+                            <div class="avatar">
+                                <div class="image">
+                                    <img src="{{ comment.author.avatar.url }}" alt="">
+                                </div>
+                            </div>
+                            <div class="data">
+                                <div class="content">
+                                    <strong>{{ comment.author.username }}</strong> {{ comment.content }}
+                                </div>
+                                <div class="date">
+                                    {{ comment.created_date }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="controls">
+                    <svg class="hover-highlight" width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#heart"></use>
+                    </svg>
+                </div>
+                <div class="date">
+                    {{ moment.created_date }}
+                </div>
+                <div class="new-comment">
+                    <form method="POST" id="newCommentForm">
+                        {% csrf_token %}
+                        <div class="textarea">
+                            <label for="newCommentText" style="display: none;">Add a comment...</label>
+                            <textarea id="newCommentText" name="content" placeholder="Add a comment..."></textarea>
+                        </div>
+                        <div class="submit-btn">
+                            <a href="#" id="postCommentButton">Post</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        postCommentButton.addEventListener('click', function () {
+            if (newCommentText.value.length === 0) {
+                alert('Write a comment first!');
+            } else {
+                newCommentForm.submit();
+            }
+        });
+    </script>
+{% endblock %}
