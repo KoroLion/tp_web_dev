@@ -10,20 +10,23 @@
         <img class="mb-4" src="{% static "logo-lg.png" %}" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Login</h1>
         <div class="form-group">
-            <label for="inputEmail">Email address</label>
-            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+            {{ form.username.errors }}
+            <label for="inputUsername">Username</label>
+            <input name="username" type="text" id="inputUsername" class="form-control" placeholder="Username" required="" autofocus="" value="{{ form.username.value }}">
         </div>
         <div class="form-group">
+            {{ form.password.errors }}
             <label for="inputPassword">Password</label>
-            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+            <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
         </div>
-        <div class="form-group form-check mb-3">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" value="remember-me"> Remember me
-                </label>
-            </div>
-        </div>
+{#        <div class="form-group form-check mb-3">#}
+{#            <div class="checkbox">#}
+{#                <label>#}
+{#                    <input type="checkbox" value="remember-me"> Remember me#}
+{#                </label>#}
+{#            </div>#}
+{#        </div>#}
+        {{ form.non_field_errors }}
         <div class="w-50 mx-auto">
             <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
         </div>

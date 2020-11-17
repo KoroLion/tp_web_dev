@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static "moments_feed/moments_feed.css" %}">
+
+    {% for moment in moments %}
+        <div class="feed mt-5">
+            <div class="moment">
+                <div class="user-info">
+                    <div class="avatar">
+                        <img src="{% static "logo-lg.png" %}" alt="">
+                    </div>
+                    <div class="username-and-location">
+                        <div class="username">
+                            <a href="#">{{ moment.author.username }}</a>
+                        </div>
+                        <div class="location">
+                            Москва, Россия
+                        </div>
+                    </div>
+                </div>
+
+                <div class="image">
+                    <img src="{{ moment.image.url }}" alt="{{ moment.image.url }}">
+                </div>
+
+                <div class="controls">
+                    <svg class="mr-2" width="32" height="32">
+                        <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#heart-fill" />
+                    </svg>
+                </div>
+
+                <div class="date">
+                    {{ moment.created_date }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    {% if is_paginated %}
+        <div class="mt-5">
+            {% include "moments_feed/paginator_nav.html" %}
+        </div>
+    {% endif %}
+{% endblock %}
