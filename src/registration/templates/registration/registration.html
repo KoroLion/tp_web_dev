@@ -8,31 +8,14 @@
     <h1>Sign Up</h1>
     <form method="POST" id="signupForm" enctype="multipart/form-data">
         {% csrf_token %}
+        {% for input in form %}
+            <div class="form-group">
+                <label for="{{ input.name }}">{{ input.label }}</label>
+                {{ input }}
+                {{ input.errors }}
+            </div>
+        {% endfor %}
 
-{#        <div class="form-group">#}
-{#            <label for="inputEmail">Email address</label>#}
-{#            <input name="email" type="email" class="form-control" id="inputEmail" required>#}
-{#            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>#}
-{#        </div>#}
-        <div class="form-group">
-            {{ form.username.errors }}
-            <label for="inputUsername">Username</label>
-            <input name="username" type="text" class="form-control" id="inputUsername" required>
-            <small id="usernameHelp" class="form-text text-muted">Your public name.</small>
-        </div>
-        <div class="form-group">
-            {{ form.password1.errors }}
-            <label for="inputPassword">Password</label>
-            <input name="password1" type="password" class="form-control" id="inputPassword" required>
-            <small id="emailHelp" class="form-text text-muted">We'll not store your password. Only it's <a href="https://en.wikipedia.org/wiki/Hash_function" target="_blank">hash</a>.</small>
-        </div>
-        <div class="form-group">
-            {{ form.password1.errors }}
-            <label for="inputPasswordConfirm">Confirm password</label>
-            <input name="password2" type="password" class="form-control" id="inputPasswordConfirm" required>
-        </div>
-
-        {{ form.non_field_errors }}
         <div class="form-group w-50 mx-auto mt-4">
             <button type="submit" class="btn btn-lg btn-primary btn-block">Sign Up</button>
         </div>

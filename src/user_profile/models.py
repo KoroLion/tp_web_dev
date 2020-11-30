@@ -1,10 +1,14 @@
 from uuid import uuid1
 import os
 
+from django.utils import timezone
+from datetime import timedelta
+
 from django.dispatch import receiver
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+# from moments_feed.models import Like
 from utils.img_tools import compress_image
 
 
@@ -14,6 +18,12 @@ def get_avatar_image_path(instance, filename):
 
 class User(AbstractUser):
     avatar = models.ImageField(upload_to=get_avatar_image_path, null=True, blank=True)
+
+    # def get_latest_likes(self):
+    #     start_date = timezone.now() - timedelta(days=5)
+    #     end_date = timezone.now()
+    #     likes = Like.objects.filter(created_date__range=[start_date, end_date])
+    #     return likes
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

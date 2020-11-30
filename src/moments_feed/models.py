@@ -21,6 +21,9 @@ class Moment(models.Model):
     def __str__(self):
         return 'Moment {}'.format(self.pk)
 
+    def get_comments_descending(self):
+        return self.comment_set.all().order_by('-id')
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.image:

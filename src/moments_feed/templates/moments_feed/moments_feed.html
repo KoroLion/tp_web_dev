@@ -1,9 +1,15 @@
 {% extends "base.html" %}
 
 {% load static %}
+{% load moments_utils %}
 
 {% block content %}
     <link rel="stylesheet" href="{% static "moments_feed/moments_feed.css" %}">
+
+    <div class="likeButton" data-commentid="1"></div>
+    <div class="likeButton" data-commentid="2"></div>
+
+    <div id="popularUsers"></div>
 
     {% for moment in moments %}
         <div class="feed mt-5">
@@ -33,22 +39,51 @@
                 </div>
 
                 <div class="controls">
-                    <svg class="hover-highlight" width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
-                        <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#heart"></use>
+                    {% is_liked_by moment request.user as is_liked %}
+                    <svg id="likeButton{{ moment.pk }}" class="hover-highlight" width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        {% if is_liked %}
+                            <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#heart-fill"></use>
+                        {% else %}
+                            <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#heart"></use>
+                        {% endif %}
                     </svg>
                     <a href="{% url "moment" moment.pk %}" class="hover-highlight">
                         <svg class=" ml-2" width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#chat-right"></use>
                         </svg>
                     </a>
+                    {% csrf_token %}
                 </div>
                 <div class="statistics">
-                    <span>0 likes</span><span>{{ moment.comment_set.count }} comments</span><span>{{ moment.tag_set.count }} tags</span>
+                    <span><span id="likesAmount{{ moment.pk }}">{{ moment.like_set.count }}</span> likes</span><span>{{ moment.comment_set.count }} comments</span><span>{{ moment.tag_set.count }} tags</span>
                 </div>
 
                 <div class="date">
                     {{ moment.created_date }}
                 </div>
+
+                <script>
+                    function registerLikeButton(btnId, requestUrl, csrfToken) {
+                        let likeButton = document.getElementById(btnId);
+                        likeButton.addEventListener('click', function (ev) {
+                            request('POST', requestUrl , {
+                                like_moment: 'submit',
+                                csrfmiddlewaretoken: csrfToken
+                            }, function (code, data) {
+                                if (code === 200) {
+                                    location.reload();
+                                } else {
+                                    alert('Error ' + code);
+                                }
+                                /*data = JSON.parse(data);
+                                let likesAmount = document.getElementById('likesAmount{{ moment.pk }}');
+                                likesAmount.innerHTML = data.likesAmount;*/
+                            });
+                        });
+                    }
+
+                    registerLikeButton('likeButton{{ moment.pk }}', '{% url 'moment' moment.pk %}', '{{ csrf_token }}');
+                </script>
             </div>
         </div>
     {% endfor %}

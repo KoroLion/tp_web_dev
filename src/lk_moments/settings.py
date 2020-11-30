@@ -38,11 +38,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'authentication',
-    'registration',
-    'moments_feed',
-    'user_profile'
+    'authentication.apps.AuthenticationConfig',
+    'registration.apps.RegistrationConfig',
+    'moments_feed.apps.MomentsFeedConfig',
+    'user_profile.apps.UserProfileConfig',
+    'rest_framework'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSIONS_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissions'
+    ]
+}
 
 AUTH_USER_MODEL = 'user_profile.User'
 LOGIN_URL = '/login/'

@@ -12,10 +12,16 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username',)
+        fields = ('username', 'email')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
 
     def save(self, commit=True):
         user = super().save(commit=False)
+        user.avatar = self.cleaned_data['avatar']
         user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()

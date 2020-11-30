@@ -12,7 +12,17 @@
 
             {% if request.user.is_authenticated %}
                 <div class="search">
-                    <input type="text" class="form-control" placeholder="Search by tag...">
+                    <label for="searchInput" hidden>Search</label>
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search by tag...">
+                    <script>
+                        let searchInput = document.getElementById('searchInput');
+                        searchInput.value = getGetParameter('search');
+                        searchInput.addEventListener('keyup', function (ev) {
+                            if (searchInput.value && ev.key === 'Enter') {
+                                window.location.href = '{% url 'moments_best' %}?search=' + searchInput.value;
+                            }
+                        });
+                    </script>
                 </div>
 
                 <div class="controls">
@@ -33,16 +43,16 @@
                             </svg>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="dropdownEventsButton">
-                            <div class="event">
-                                <div class="avatar">
-                                    <div class="image">
-                                        <img src="{{ request.user.avatar.url }}" alt="">
-                                    </div>
-                                </div>
-                                <div class="event-text"><a href="#">{{ request.user.username }}</a> subscribed</div>
-                                <div class="image"></div>
-                                <div class="subscribe"><button class="btn btn-primary">Subscribe</button></div>
-                            </div>
+{#                            <div class="event">#}
+{#                                <div class="avatar">#}
+{#                                    <div class="image">#}
+{#                                        <img src="{{ request.user.avatar.url }}" alt="">#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="event-text"><a href="#">{{ request.user.username }}</a> subscribed</div>#}
+{#                                <div class="image"></div>#}
+{#                                <div class="subscribe"><button class="btn btn-primary">Subscribe</button></div>#}
+{#                            </div>#}
                             <div class="event">
                                 <div class="avatar">
                                     <div class="image">
@@ -51,7 +61,6 @@
                                 </div>
                                 <div class="event-text"><a href="#">{{ request.user.username }}</a> liked your moment</div>
                                 <div class="image"></div>
-                                <div class="subscribe"><button class="btn btn-primary">Subscribe</button></div>
                             </div>
                         </div>
                     </div>
