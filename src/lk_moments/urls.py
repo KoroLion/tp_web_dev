@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 from registration.views import RegistrationView
 from authentication.views import LoginView
-from moments_feed.views import MomentsFeedView, MomentView, MomentsListView
+from moments_feed.views import MomentsFeedView, MomentView, MomentsListView, MomentAddView
 from user_profile.views import Profile, ProfileEdit
 
 from lk_moments.rest import router
@@ -26,6 +26,7 @@ urlpatterns = [
     path('', login_required(MomentsFeedView.as_view()), name='moments_feed'),
     path('moments/<int:pk>/', login_required(MomentView.as_view()), name='moment'),
     path('moments/best/', login_required(MomentsListView.as_view()), name='moments_best'),
+    path('moments/add/', login_required(MomentAddView.as_view()), name='moment_add'),
 
     path('rest-api/', include(router.urls))
     # path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))

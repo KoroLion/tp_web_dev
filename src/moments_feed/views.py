@@ -1,6 +1,6 @@
 import json
 
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from django.utils import timezone
 from django.shortcuts import redirect, reverse, get_object_or_404
 from django.http.response import HttpResponse
@@ -12,7 +12,7 @@ class MomentsListView(ListView):
     model = Moment
     context_object_name = 'moments'
     ordering = '-id'
-    paginate_by = 2
+    paginate_by = 10
     template_name = 'moments_feed/moments_best.html'
 
     def get_queryset(self):
@@ -26,6 +26,12 @@ class MomentsListView(ListView):
 
 class MomentsFeedView(MomentsListView):
     template_name = 'moments_feed/moments_feed.html'
+
+
+class MomentAddView(CreateView):
+    model = Moment
+    template_name = 'moments_feed/moment_add.html'
+    fields = ('description', 'image', 'author')
 
 
 class MomentView(DetailView):
