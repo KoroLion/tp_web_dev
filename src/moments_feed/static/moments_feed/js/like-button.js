@@ -21,7 +21,7 @@ document.querySelectorAll('.likeButton')
                             liked: !this.state.liked
                         });
                     } else {
-                        alert('Error ' + code);
+                        console.error('Error while retrieving users ' + code);
                     }
                 });
             }
