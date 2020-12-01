@@ -16,7 +16,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'is_staff']
+        fields = ['username']
 
 
 # ViewSets define the view behavior.
