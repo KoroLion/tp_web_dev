@@ -12,6 +12,7 @@
             <div class="form-group">
                 <label for="{{ input.name }}">{{ input.label }}</label>
                 {{ input }}
+                <small class="text-muted">{{ input.help_text }}</small>
                 {{ input.errors }}
             </div>
         {% endfor %}

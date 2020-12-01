@@ -5,7 +5,7 @@ from django.db.models import Count
 
 
 class StandardResultsSetPagination(pagination.PageNumberPagination):
-    page_size = 2
+    page_size = 5
     page_size_query_param = 'page_size'
     max_page_size = 1000
 
@@ -23,6 +23,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.annotate(num_moments=Count('moment')).order_by('-num_moments')
     serializer_class = UserSerializer
+
+    pagination_class = StandardResultsSetPagination
 
 
 class LikeSerializer(serializers.HyperlinkedModelSerializer):

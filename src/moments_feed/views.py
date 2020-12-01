@@ -5,33 +5,48 @@ from django.utils import timezone
 from django.shortcuts import redirect, reverse, get_object_or_404
 from django.http.response import HttpResponse
 
-from .models import Moment, Comment, Tag, Like
+from moments_feed.models import Moment, Comment, Tag, Like
+from moments_feed.forms import MomentCreateForm
 
 
 class MomentsListView(ListView):
     model = Moment
     context_object_name = 'moments'
     ordering = '-id'
-    paginate_by = 10
+    paginate_by = 4 * 3  # 3 per row
     template_name = 'moments_feed/moments_best.html'
 
     def get_queryset(self):
         search = self.request.GET.get('search', None)
         if search:
-            tag = get_object_or_404(Tag, name=search)
-            return tag.moment.all()
+            tag = Tag.objects.filter(name=search)
+            if len(tag) != 0:
+                return tag[0].moment.all()
+            else:
+                # nothing found = empty list
+                return list()
 
         return super().get_queryset()
 
 
 class MomentsFeedView(MomentsListView):
+    paginate_by = 10
     template_name = 'moments_feed/moments_feed.html'
 
 
 class MomentAddView(CreateView):
     model = Moment
     template_name = 'moments_feed/moment_add.html'
-    fields = ('description', 'image', 'author')
+    form_class = MomentCreateForm
+
+    def get_success_url(self):
+        print(self.object)
+        return reverse('moment', args=(self.object.pk,))
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
 
 class MomentView(DetailView):

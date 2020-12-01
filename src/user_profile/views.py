@@ -14,9 +14,6 @@ class UserEditForm(ModelForm):
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
-    def save(self, commit=True):
-        user = super().save(commit=True)
-
 
 class Profile(DetailView):
     model = User

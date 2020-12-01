@@ -1,6 +1,7 @@
 import os
 from uuid import uuid1
 
+from django.shortcuts import reverse
 from django.db import models
 from django.dispatch import receiver
 
@@ -25,6 +26,7 @@ class Moment(models.Model):
         return self.comment_set.all().order_by('-id')
 
     def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
         if self.image:
             compress_image(self.image.path, 600, 600)
 

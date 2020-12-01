@@ -38,7 +38,7 @@
                             <div class="avatar">
                                 <div class="image">
                                     <a href="{% url "profile" comment.author.username %}">
-                                        <img src="{{ comment.author.avatar.url }}" alt="">
+                                        <img src="{{ comment.author.get_avatar_url }}" alt="">
                                     </a>
                                 </div>
                             </div>
