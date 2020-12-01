@@ -8,7 +8,7 @@
         <div class="user-info">
             <div class="avatar">
                 <div class="image">
-                    <img src="{{ user.avatar.url }}" alt="">
+                    <img src="{{ user.get_avatar_url }}" alt="">
                 </div>
             </div>
             <div class="info">
@@ -16,6 +16,8 @@
                     <span class="h2">{{ user.username }}</span>
                     {% if user != request.user %}
                         <button class="btn btn-primary mb-3 ml-3" style="display: inline-block">Subscribe</button>
+                    {% else %}
+                        <a href="{% url "profile_edit" request.user.username %}" class="btn btn-primary mb-3 ml-3">Edit profile</a>
                     {% endif %}
                 </div>
                 <div class="statistics">
@@ -23,6 +25,7 @@
                     <span><strong>0</strong> followers</span>
                     <span><strong>0</strong> following</span>
                 </div>
+                <a href="#" class="btn btn-primary mt-3">New moment</a>
             </div>
         </div>
 

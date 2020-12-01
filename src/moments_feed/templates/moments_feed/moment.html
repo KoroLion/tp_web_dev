@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
 {% load static %}
+{% load moments_utils %}
 
 {% block content %}
+    <link rel="stylesheet" href="{% static "moments_feed/global.css" %}">
     <link rel="stylesheet" href="{% static "moments_feed/moment.css" %}">
 
     <div class="container mt-5">
@@ -14,7 +16,7 @@
                 <div class="user-info">
                     <div class="avatar">
                         <a href="{% url "profile" moment.author.username %}">
-                            <img src="{{ moment.author.avatar.url }}" alt="">
+                            <img src="{{ moment.author.get_avatar_url }}" alt="">
                         </a>
                     </div>
                     <div class="username-and-location">
@@ -58,9 +60,15 @@
                     {% endfor %}
                 </div>
                 <div class="controls">
-                    <svg class="hover-highlight" width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
-                        <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#heart"></use>
-                    </svg>
+                    {% is_liked_by moment request.user as is_liked %}
+                    <div class="likeButton"
+                         data-liked="{{ is_liked }}"
+                         data-momentpk="{{ moment.pk }}"
+                         data-requesturl="{% url 'moment' moment.pk %}"
+                         data-csrftoken="{{ csrf_token }}"
+                         data-svgiconsurl="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}">
+                    </div>
+                    <span class="ml-1"><span id="likesAmount{{ moment.pk }}">{{ moment.like_set.count }}</span> likes</span>
                 </div>
                 <div class="date">
                     {{ moment.created_date }}
@@ -105,4 +113,8 @@
             }
         });
     </script>
+{% endblock %}
+
+{% block before_body_end %}
+    <script src="{% static 'moments_feed/like-button.js' %}"></script>
 {% endblock %}

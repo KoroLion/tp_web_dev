@@ -30,67 +30,7 @@
     <script src="{% static "node_modules/bootstrap/dist/js/bootstrap.bundle.js" %}"></script>
     <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-    <script>
-        const domContainer = document.querySelector('#popularUsers');
-        const e = React.createElement;
-        class PopularUsers extends React.Component {
-            constructor(props) {
-                super(props);
-            }
-
-            componentDidMount() {
-                request('GET', '/rest-api/users/?format=json', {}, function (code, data) {
-                    if (code === 200) {
-                        let res = [];
-                        data = JSON.parse(data);
-                        for (let user of data) {
-                            let userSpan = React.createElement('a', {
-                                key: user.username,
-                                href: '/@' + user.username,
-                                class: 'user'
-                            }, user.username);
-                            //userSpan.classList.add('user');
-                            //userSpan.innerHTML = user.username;
-                            res.push(userSpan);
-                        }
-                        this.setState({ users: React.createElement('span', null, res) });
-                    }
-                }.bind(this));
-            }
-
-            render() {
-                if (this.state && this.state.users) {
-                    return this.state.users;
-                } else {
-                    return 'Loading users...';
-                }
-            }
-        }
-        ReactDOM.render(React.createElement(PopularUsers), domContainer);
-
-        document.querySelectorAll('.likeButton')
-            .forEach(domContainer => {
-                class LikeButton extends React.Component {
-                  constructor(props) {
-                    super(props);
-                    this.state = { liked: false };
-                  }
-
-                  render() {
-                    if (this.state.liked) {
-                        return 'You liked this (' + this.props.commentId + ')';
-                    }
-
-                    return e(
-                        'button',
-                        { onClick: () => this.setState({ liked: true }) },
-                        'Like'
-                    );
-                  }
-                }
-                const commentId = parseInt(domContainer.dataset.commentid, 10);
-                ReactDOM.render(e(LikeButton, { commentId: commentId }), domContainer);
-            });
-    </script>
+    {% block before_body_end %}
+    {% endblock %}
 </body>
 </html>

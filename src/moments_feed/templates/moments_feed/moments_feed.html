@@ -1,23 +1,21 @@
 {% extends "base.html" %}
 
-{% load static %}
+{% load static %}s
 {% load moments_utils %}
 
 {% block content %}
+    <link rel="stylesheet" href="{% static "moments_feed/global.css" %}">
     <link rel="stylesheet" href="{% static "moments_feed/moments_feed.css" %}">
 
-    <div class="likeButton" data-commentid="1"></div>
-    <div class="likeButton" data-commentid="2"></div>
+    <div class="feed">
+        <div id="popularUsers"></div>
 
-    <div id="popularUsers"></div>
-
-    {% for moment in moments %}
-        <div class="feed mt-5">
+        {% for moment in moments %}
             <div class="moment">
                 <div class="user-info">
                     <div class="avatar">
                         <a href="{% url "profile" moment.author.username %}">
-                            <img src="{{ moment.author.avatar.url }}" alt="">
+                            <img src="{{ moment.author.get_avatar_url }}" alt="">
                         </a>
                     </div>
                     <div class="username-and-location">
@@ -40,13 +38,14 @@
 
                 <div class="controls">
                     {% is_liked_by moment request.user as is_liked %}
-                    <svg id="likeButton{{ moment.pk }}" class="hover-highlight" width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
-                        {% if is_liked %}
-                            <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#heart-fill"></use>
-                        {% else %}
-                            <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#heart"></use>
-                        {% endif %}
-                    </svg>
+                    <div class="likeButton"
+                         data-liked="{{ is_liked }}"
+                         data-momentpk="{{ moment.pk }}"
+                         data-requesturl="{% url 'moment' moment.pk %}"
+                         data-csrftoken="{{ csrf_token }}"
+                         data-svgiconsurl="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}">
+                    </div>
+
                     <a href="{% url "moment" moment.pk %}" class="hover-highlight">
                         <svg class=" ml-2" width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#chat-right"></use>
@@ -61,36 +60,53 @@
                 <div class="date">
                     {{ moment.created_date }}
                 </div>
-
-                <script>
-                    function registerLikeButton(btnId, requestUrl, csrfToken) {
-                        let likeButton = document.getElementById(btnId);
-                        likeButton.addEventListener('click', function (ev) {
-                            request('POST', requestUrl , {
-                                like_moment: 'submit',
-                                csrfmiddlewaretoken: csrfToken
-                            }, function (code, data) {
-                                if (code === 200) {
-                                    location.reload();
-                                } else {
-                                    alert('Error ' + code);
-                                }
-                                /*data = JSON.parse(data);
-                                let likesAmount = document.getElementById('likesAmount{{ moment.pk }}');
-                                likesAmount.innerHTML = data.likesAmount;*/
-                            });
-                        });
-                    }
-
-                    registerLikeButton('likeButton{{ moment.pk }}', '{% url 'moment' moment.pk %}', '{{ csrf_token }}');
-                </script>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
 
     {% if is_paginated %}
-        <div class="mt-5">
+        <div class="mt-1">
             {% include "moments_feed/paginator_nav.html" %}
         </div>
     {% endif %}
+{% endblock %}
+
+{% block before_body_end %}
+        <script>
+        const domContainer = document.querySelector('#popularUsers');
+        const e = React.createElement;
+        class PopularUsers extends React.Component {
+            constructor(props) {
+                super(props);
+            }
+
+            componentDidMount() {
+                request('GET', '/rest-api/users/?format=json', {}, function (code, data) {
+                    if (code === 200) {
+                        let res = [];
+                        data = JSON.parse(data);
+                        for (let user of data) {
+                            let userSpan = React.createElement('a', {
+                                key: user.username,
+                                href: '/@' + user.username,
+                                className: 'user'
+                            }, user.username);
+                            res.push(userSpan);
+                        }
+                        this.setState({ users: React.createElement('span', null, res) });
+                    }
+                }.bind(this));
+            }
+
+            render() {
+                if (this.state && this.state.users) {
+                    return this.state.users;
+                } else {
+                    return 'Loading users...';
+                }
+            }
+        }
+        ReactDOM.render(React.createElement(PopularUsers), domContainer);
+    </script>
+    <script src="{% static 'moments_feed/like-button.js' %}"></script>
 {% endblock %}

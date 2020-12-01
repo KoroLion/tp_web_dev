@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from registration.views import RegistrationView
 from authentication.views import LoginView
 from moments_feed.views import MomentsFeedView, MomentView, MomentsListView
-from user_profile.views import Profile
+from user_profile.views import Profile, ProfileEdit
 
 from lk_moments.rest import router
 
@@ -21,6 +21,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page=settings.LOGIN_URL), name='logout'),
 
     path('@<str:slug>/', login_required(Profile.as_view()), name='profile'),
+    path('@<str:slug>/edit', login_required(ProfileEdit.as_view()), name='profile_edit'),
 
     path('', login_required(MomentsFeedView.as_view()), name='moments_feed'),
     path('moments/<int:pk>/', login_required(MomentView.as_view()), name='moment'),
