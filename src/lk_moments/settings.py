@@ -21,12 +21,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '@w6q6zhm-ml=44uq!6_j@3q2@q4n2dzd7srs7+tn#7@(ot-bw!'
+SECRET_KEY = os.environ.get('SECRET_KEY', '@w6q6zhm-ml=44uq!6_j@3q2@q4n2dzd7srs7+tn#7@(ot-bw!')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'TRUE') == 'TRUE'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    'moments.liokor.com'
+]
 
 
 # Application definition
@@ -130,6 +133,10 @@ USE_TZ = True
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+if not DEBUG:
+    STATIC_ROOT = os.path.abspath('/var/www/tp_web_dev/static/')
+    MEDIA_ROOT = os.path.abspath('/var/www/tp_web_dev/media/')
 
 STATIC_URL = '/static/'
 STATICFILES_FINDERS = (
