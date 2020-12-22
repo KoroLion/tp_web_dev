@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block head_title %}Sign Up{% endblock %}
+
+{% block content %}
+
+<div class="w-50 text-center mx-auto mt-4" style="max-width: 500px;">
+    <h1>Sign Up</h1>
+    <form method="POST" id="signupForm" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for input in form %}
+            <div class="form-group">
+                <label for="{{ input.name }}">{{ input.label }}</label>
+                {{ input }}
+                <small class="text-muted">{{ input.help_text }}</small>
+                {% for error in input.errors %}
+                    <div class="alert alert-danger mt-2" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <div class="form-group w-50 mx-auto mt-4">
+            <button type="submit" class="btn btn-lg btn-primary btn-block">Sign Up</button>
+        </div>
+    </form>
+
+    <hr>
+
+    <span class="h4">
+        Already member?
+        <a href="{% url "login" %}">Login</a> then.
+    </span>
+
+    <script>
+        signupForm.addEventListener('submit', function (e) {
+            if (inputPassword.value !== inputPasswordConfirm.value) {
+                alert("Passwords do not match!");
+                e.preventDefault();
+            }
+        });
+    </script>
+</div>
+{% endblock %}

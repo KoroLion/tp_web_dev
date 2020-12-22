@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% load static %}s
+{% load moments_utils %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static "moments_feed/global.css" %}">
+    <link rel="stylesheet" href="{% static "moments_feed/moments_feed.css" %}">
+
+    <div class="feed">
+        <div id="popularUsers"></div>
+
+        {% for moment in moments %}
+            <div class="moment">
+                <div class="user-info">
+                    <div class="avatar">
+                        <a href="{% url "profile" moment.author.username %}">
+                            <img src="{{ moment.author.get_avatar_url }}" alt="">
+                        </a>
+                    </div>
+                    <div class="username-and-location">
+                        <div class="username">
+                            <a href="{% url "profile" moment.author.username %}">{{ moment.author.username }}</a>
+                        </div>
+                        <div class="description">
+                            {% if moment.description %}
+                                {{ moment.description }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="image">
+                    <a href="{% url "moment" moment.pk %}">
+                        <img src="{{ moment.image.url }}" alt="{{ moment.image.url }}">
+                    </a>
+                </div>
+
+                <div class="controls">
+                    {% is_liked_by moment request.user as is_liked %}
+                    <div class="likeButton"
+                         data-liked="{{ is_liked }}"
+                         data-momentpk="{{ moment.pk }}"
+                         data-requesturl="{% url 'moment' moment.pk %}"
+                         data-csrftoken="{{ csrf_token }}"
+                         data-svgiconsurl="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}">
+                    </div>
+
+                    <a href="{% url "moment" moment.pk %}" class="hover-highlight">
+                        <svg class=" ml-2" width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#chat-right"></use>
+                        </svg>
+                    </a>
+                    {% csrf_token %}
+                </div>
+                <div class="statistics">
+                    <span><span id="likesAmount{{ moment.pk }}">{{ moment.like_set.count }}</span> likes</span><span>{{ moment.comment_set.count }} comments</span><span>{{ moment.tag_set.count }} tags</span>
+                </div>
+
+                <div class="date">
+                    {{ moment.created_date }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+        <div class="mt-1">
+            {% include "moments_feed/paginator_nav.html" %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block before_body_end %}
+    <script src="{% static 'moments_feed/js/users.js' %}"></script>
+    <script src="{% static 'moments_feed/js/like-button.js' %}"></script>
+{% endblock %}

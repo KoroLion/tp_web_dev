@@ -1,0 +1,92 @@
+div.feed
+  width 600px
+  margin 0 auto
+
+div.moment
+  border 1px solid #CCC
+  border-radius 3px
+  display flex
+  max-height 602px
+  div.image
+    height 600px
+    img
+      width 100%
+      height 100%
+  div.user-info-and-comments
+    display flex
+    flex-direction column
+    flex-grow 1
+    width 540px
+    max-width 540px
+    div.user-info
+      display flex
+      padding 5px
+      padding-left 20px
+      border-bottom 1px solid #EEE
+      div.avatar
+        min-width 50px
+        height 50px
+        border-radius 64px
+        overflow hidden
+        img
+          width 100%
+          height 100%
+      div.username-and-location
+        margin-left 15px
+    div.comments
+      flex-grow 1
+      padding 10px
+      max-height 335px
+      overflow-y scroll
+      div.comment
+        margin-bottom 30px
+        display flex
+        div.avatar
+          padding 10px
+          div.image
+            width 40px
+            height 40px
+            border-radius 100%
+            overflow hidden
+            img
+              width 100%
+              height 100%
+        div.data
+          padding-top 10px
+          margin-left 10px
+          flex-grow 1
+          div.date
+            padding 0
+            padding-top 5px
+            color #AAA
+  div.controls
+    padding 10px
+  div.tags
+    padding 10px
+  div.date
+    padding 10px
+    padding-top 0
+    color #AAA
+  div.new-comment
+    $newCommentHeight = 70px
+    border-top 1px solid #EEE
+    position relative
+    height $newCommentHeight
+    form
+      display flex
+      height 100%
+      div.textarea
+        flex-grow 1
+        padding 5px
+      div.submit-btn
+        width 65px
+        font-size 1.2em
+        line-height $newCommentHeight
+        text-align center
+    textarea
+      width 100%
+      height 100%
+      overflow auto
+      max-width 100%
+      resize none
+      border 0

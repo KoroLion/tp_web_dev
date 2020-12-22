@@ -1,0 +1,86 @@
+{% load static %}
+
+<header>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container d-flex">
+            <a href="/" class="navbar-brand d-flex align-items-center hover-highlight" id="logo">
+                <svg class="mr-2" width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#camera-fill"></use>
+                </svg>
+                <strong>LK Moments</strong>
+            </a>
+
+            {% if request.user.is_authenticated %}
+                <div class="search">
+                    <label for="searchInput" hidden>Search</label>
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search by tag...">
+                    <script>
+                        let searchInput = document.getElementById('searchInput');
+                        searchInput.value = getGetParameter('search');
+                        searchInput.addEventListener('keyup', function (ev) {
+                            if (searchInput.value && ev.key === 'Enter') {
+                                window.location.href = '{% url 'moments_best' %}?search=' + searchInput.value;
+                            }
+                        });
+                    </script>
+                </div>
+
+                <div class="controls">
+                    <a href="{% url "moments_best" %}" class="hover-highlight">
+                        <svg width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#compass"></use>
+                        </svg>
+                    </a>
+                    <a href="{% url "moments_feed" %}" class="hover-highlight">
+                        <svg width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#house"></use>
+                        </svg>
+                    </a>
+                    <div class="dropdown dropdown-events">
+                        <a href="#" class="hover-highlight" id="dropdownEventsButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <svg width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <use xlink:href="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}#heart"></use>
+                            </svg>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="dropdownEventsButton">
+{#                            <div class="event">#}
+{#                                <div class="avatar">#}
+{#                                    <div class="image">#}
+{#                                        <img src="{{ request.user.get_avatar_url }}" alt="">#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="event-text"><a href="#">{{ request.user.username }}</a> subscribed</div>#}
+{#                                <div class="image"></div>#}
+{#                                <div class="subscribe"><button class="btn btn-primary">Subscribe</button></div>#}
+{#                            </div>#}
+                            <div class="event">
+                                <div class="avatar">
+                                    <div class="image">
+                                        <img src="{{ request.user.get_avatar_url }}" alt="">
+                                    </div>
+                                </div>
+                                <div class="event-text"><a href="#">{{ request.user.username }}</a> liked your moment</div>
+                                <div class="image"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user dropdown">
+                        <div class="avatar" id="dropdownProfileButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="{{ request.user.get_avatar_url }}" alt="">
+                        </div>
+                        <div class="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="dropdownProfileButton">
+                            <a class="dropdown-item" href="{% url "profile" request.user.username %}">Profile</a>
+                            {% if request.user.is_staff %}
+                                <a class="dropdown-item text-primary" href="{% url "admin:index" %}" target="_blank">
+                                    Administrator
+                                </a>
+                            {% endif %}
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="{% url "logout" %}">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</header>
