@@ -1,0 +1,10 @@
+----- Using nginx:
+Running 10s test @ https://moments.liokor.com
+  6 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   170.50ms  271.54ms   1.32s    85.20%
+    Req/Sec   834.57    198.81     1.38k    73.01%
+  46061 requests in 10.06s, 13.84MB read
+  Non-2xx or 3xx responses: 44862
+Requests/sec:   4577.72
+Transfer/sec:      1.38MB
