@@ -25,7 +25,10 @@
                     <span><strong>0</strong> followers</span>
                     <span><strong>0</strong> following</span>
                 </div>
-                <a href="{% url 'moment_add' %}" class="btn btn-primary mt-3">New moment</a>
+
+                {% if user == request.user %}
+                    <a href="{% url 'moment_add' %}" class="btn btn-primary mt-3">New moment</a>
+                {% endif %}
             </div>
         </div>
 

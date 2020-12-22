@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView
+from django.views.generic import FormView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.shortcuts import redirect, reverse, render
@@ -28,22 +28,13 @@ class CustomUserCreationForm(UserCreationForm):
         return user
 
 
-class RegistrationView(TemplateView):
+class RegistrationView(FormView):
     template_name = "registration/registration.html"
+    form_class = CustomUserCreationForm
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        form = CustomUserCreationForm()
-        context.update({'form': form})
-        return context
-
-    def post(self, request, *args, **kwargs):
-        form = CustomUserCreationForm(data=request.POST, files=request.FILES)
-        if form.is_valid():
-            user = form.save()
-            user.avatar = form.cleaned_data.get('avatar', None)
-            user.save()
-            login(request, user)
-            return redirect(reverse('profile', args=(user.username,)))
-
-        return render(request, self.template_name, {'form': form})
+    def form_valid(self, form):
+        user = form.save()
+        user.avatar = form.cleaned_data.get('avatar', None)
+        user.save()
+        login(self.request, user)
+        return redirect(reverse('profile', args=(user.username,)))
