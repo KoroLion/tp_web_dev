@@ -1,10 +1,21 @@
------ Using nginx:
+wrk -c 100 -t6 -d10s https://moments.liokor.com
+
+--- nginx without proxy cache
 Running 10s test @ https://moments.liokor.com
-  6 threads and 400 connections
+  6 threads and 100 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency   170.50ms  271.54ms   1.32s    85.20%
-    Req/Sec   834.57    198.81     1.38k    73.01%
-  46061 requests in 10.06s, 13.84MB read
-  Non-2xx or 3xx responses: 44862
-Requests/sec:   4577.72
-Transfer/sec:      1.38MB
+    Latency   196.18ms   25.22ms 309.89ms   82.32%
+    Req/Sec    80.96     33.11   161.00     73.57%
+  4756 requests in 10.03s, 1.28MB read
+Requests/sec:    474.38
+Transfer/sec:    131.10KB
+
+--- nginx with proxy cache
+Running 10s test @ https://moments.liokor.com
+  6 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     9.22ms   18.18ms 226.21ms   97.93%
+    Req/Sec     2.19k   520.76     3.46k    72.22%
+  129348 requests in 10.01s, 34.90MB read
+Requests/sec:  12919.95
+Transfer/sec:      3.49MB
