@@ -1,0 +1,8 @@
+[Unit]
+Description=tp_web_dev gunicorn socket
+
+[Socket]
+ListenStream=/run/tp_web_dev_gunicorn.sock
+
+[Install]
+WantedBy=sockets.target

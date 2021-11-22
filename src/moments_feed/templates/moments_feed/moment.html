@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load moments_utils %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static "moments_feed/global.css" %}">
+    <link rel="stylesheet" href="{% static "moments_feed/moment.css" %}">
+
+    <div class="container mt-5">
+        <div class="moment">
+            <div class="image">
+                <img src="{{ moment.image.url }}" alt="{{ moment.image.url }}">
+            </div>
+            <div class="user-info-and-comments">
+                <div class="user-info">
+                    <div class="avatar">
+                        <a href="{% url "profile" moment.author.username %}">
+                            <img src="{{ moment.author.get_avatar_url }}" alt="">
+                        </a>
+                    </div>
+                    <div class="username-and-location">
+                        <div class="username">
+                            <a href="{% url "profile" moment.author.username %}">
+                                <strong>{{ moment.author.username }}</strong>
+                            </a>
+                        </div>
+                        <div class="description">
+                            {% if moment.description %}
+                                {{ moment.description }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="comments">
+                    {% for comment in moment.get_comments_descending %}
+                        <div class="comment">
+                            <div class="avatar">
+                                <div class="image">
+                                    <a href="{% url "profile" comment.author.username %}">
+                                        <img src="{{ comment.author.get_avatar_url }}" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="data">
+                                <div class="content">
+                                    <a href="{% url "profile" comment.author.username %}">{{ comment.author.username }}</a> {{ comment.content }}
+                                </div>
+                                <div class="date">
+                                    {{ comment.created_date }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="tags">
+                    Tags:
+                    {% for tag in moment.tag_set.all %}
+                        <a href="{% url "moments_best" %}?search={{ tag.name }}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="controls">
+                    {% is_liked_by moment request.user as is_liked %}
+                    <div class="likeButton"
+                         data-liked="{{ is_liked }}"
+                         data-momentpk="{{ moment.pk }}"
+                         data-requesturl="{% url 'moment' moment.pk %}"
+                         data-csrftoken="{{ csrf_token }}"
+                         data-svgiconsurl="{% static "node_modules/bootstrap-icons/bootstrap-icons.svg" %}">
+                    </div>
+                    <span class="ml-1"><span id="likesAmount{{ moment.pk }}">{{ moment.like_set.count }}</span> likes</span>
+                </div>
+                <div class="date">
+                    {{ moment.created_date }}
+                </div>
+                <div class="new-comment">
+                    <form method="POST" id="newCommentForm">
+                        {% csrf_token %}
+                        <div class="textarea">
+                            <label for="newCommentText" style="display: none;">Add a comment...</label>
+                            <textarea id="newCommentText" name="content" placeholder="Add a comment..."></textarea>
+                        </div>
+                        <div class="submit-btn">
+                            <a href="#" id="postCommentButton">Post</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let postCommentButton = document.getElementById('postCommentButton');
+        let newCommentForm = document.getElementById('newCommentForm');
+        let newCommentText = document.getElementById('newCommentText');
+
+        function submitForm() {
+            if (newCommentText.value.length === 0) {
+                alert('Write a comment first!');
+            } else {
+                newCommentForm.submit();
+            }
+        }
+        postCommentButton.addEventListener('click', submitForm);
+        newCommentText.addEventListener('keypress', function (ev) {
+            if (ev.key === 'Enter') {
+                ev.preventDefault();
+            }
+        });
+        newCommentText.addEventListener('keyup', function (ev) {
+            if (ev.key === 'Enter') {
+                submitForm();
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block before_body_end %}
+    <script src="{% static 'moments_feed/js/like-button.js' %}"></script>
+{% endblock %}

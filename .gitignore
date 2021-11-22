@@ -1,0 +1,10 @@
+.idea
+node_modules
+media
+
+access.log
+error.log
+
+__pycache__
+*.sqlite3
+*.css

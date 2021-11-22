@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+    <div class="container mt-3">
+        <h2>New moment</h2>
+        <form method="POST" id="signupForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for input in form %}
+                <div class="form-group">
+                    <label for="{{ input.name }}">{{ input.label }}</label>
+                    {{ input }}
+                    <small class="text-muted">{{ input.help_text }}</small>
+                    {{ input.errors }}
+                </div>
+            {% endfor %}
+
+            <div class="form-group w-25 mx-auto mt-4">
+                <button type="submit" class="btn btn-primary btn-block">Create</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block before_body_end %}
+{% endblock %}

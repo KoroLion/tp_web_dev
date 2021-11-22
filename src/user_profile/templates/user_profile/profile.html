@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static "user_profile/profile.css" %}">
+    <div class="user-profile container">
+        <div class="user-info">
+            <div class="avatar">
+                <div class="image">
+                    <img src="{{ user.get_avatar_url }}" alt="">
+                </div>
+            </div>
+            <div class="info">
+                <div class="username">
+                    <span class="h2">{{ user.username }}</span>
+                    {% if user != request.user %}
+                        <button class="btn btn-primary mb-3 ml-3" style="display: inline-block">Subscribe</button>
+                    {% else %}
+                        <a href="{% url "profile_edit" request.user.username %}" class="btn btn-primary mb-3 ml-3">Edit profile</a>
+                    {% endif %}
+                </div>
+                <div class="statistics">
+                    <span><strong>{{ user.moment_set.count }}</strong> moments</span>
+                    <span><strong>0</strong> followers</span>
+                    <span><strong>0</strong> following</span>
+                </div>
+
+                {% if user == request.user %}
+                    <a href="{% url 'moment_add' %}" class="btn btn-primary mt-3">New moment</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="user-moments">
+            {% for moment in user.moment_set.all %}
+                <div>
+                    <a href="{% url "moment" moment.pk %}">
+                        <img src="{{ moment.image.url }}" alt="">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

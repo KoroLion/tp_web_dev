@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static "user_profile/profile.css" %}">
+
+    <div class="user-profile container mt-3">
+        <h2>Edit profile</h2>
+        <form method="POST" id="signupForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for input in form %}
+                <div class="form-group">
+                    <label for="{{ input.name }}">{{ input.label }}</label>
+                    {{ input }}
+                    <small class="text-muted">{{ input.help_text }}</small>
+                    {{ input.errors }}
+                </div>
+            {% endfor %}
+
+            <div class="form-group w-50 mt-4">
+                <a href="{% url "profile" request.user.username %}" class="btn btn-warning btn-block">Cancel</a>
+                <button type="submit" class="btn btn-success btn-block">Save</button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

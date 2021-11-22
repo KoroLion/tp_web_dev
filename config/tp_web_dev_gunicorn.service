@@ -1,0 +1,19 @@
+[Unit]
+Description=tp_web_dev gunicorn daemon
+Requires=tp_web_dev_gunicorn.socket
+After=network.target
+
+[Service]
+User=www
+Group=www-data
+Environment=DEBUG=FALSE
+Environment=SECRET_KEY=SUPER_SECRET_KEY
+WorkingDirectory=/home/korolion/tp_web_dev/src
+ExecStart=/home/korolion/tp_web_dev_venv/bin/gunicorn \
+          --access-logfile - \
+          --workers 1 \
+          --bind unix:/run/tp_web_dev_gunicorn.sock \
+          lk_moments.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
